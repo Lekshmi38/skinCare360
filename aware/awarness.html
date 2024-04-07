@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Health Awareness</title>
+    
+</head>
+<style>
+    
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    background-color:#F2D7D5 ;
+    color: black;
+    padding: 1rem;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 1rem;
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+}
+
+main {
+    padding: 2rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+footer {
+    background-color:#F2D7D5 ;
+    color: black;
+    padding: 1rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.product-review, .chemical-free {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.product-review h3, .chemical-free h3 {
+    margin-top: 0;
+}
+
+</style>
+<body>
+    <header>
+        <h1>Skin Health Awareness</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#tips">Tips</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#submit-tip">Submit Your Tip</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="about">
+            <h2>About Skin Health</h2>
+            <p><i>Skin health is paramount to our overall well-being, serving as the body's frontline defense against external threats while also reflecting internal balance.<br>
+                 It encompasses the intricate balance of hydration, protection, and renewal processes that contribute to a radiant and resilient complexion. Our skin acts as a barrier,<br>
+                  shielding us from harmful UV rays, pollutants, and pathogens, while also regulating body temperature and moisture levels. Achieving optimal skin health involves a holistic approach,<br>
+                   encompassing factors such as nutrition, hydration, lifestyle choices, and skincare routines. By nurturing our skin with proper care and attention, we not only enhance its appearance<br>
+                    but also promote its ability to function optimally, supporting a healthy and vibrant complexion that radiates from within<br>.</i></p>
+        </section>
+        <section id="tips">
+            <h2>Skin Health Tips</h2>
+            <h3>View Health Tips
+                <form id="viewTipForm" action="/view_tip" method="POST">
+                    <button type="submit">VIEW</button>
+                    <div id="healthTips" style="border:0.5px solid black;font-size: 16px;font-style: italic;">
+ 
+                    </div>
+                </form>
+            </h3>
+            <form action="/submit_tips" method="POST">
+                <label for="name">Enter your name :</label><br>
+                <textarea id="name" name="user" rows="4" cols="10"></textarea><br>
+                <label for="tip">Enter your skin health tip:</label><br>
+                <textarea id="tip" name="tip" rows="4" cols="50"></textarea><br>
+                <button type="submit">Submit</button>
+              </form>
+        </section>
+        <div>
+               
+        </div>
+        <section id="tips">
+            <h2>Product Review</h2>
+            <h3>View Product Review
+                <form id="productViewForm" action="/view_product_reviews" method="POST">
+                    <button type="submit">VIEW</button>
+                    <div id="productTips" style="border:0.5px solid black;font-size: 16px;font-style: italic;"></div>
+                </form>
+            </h3>
+            <form action="/submit_product_review" method="POST">
+                <label for="productName">Enter product name:</label><br>
+                <textarea id="productName" name="productName" rows="4" cols="10"></textarea><br>
+                <label for="productReview">Enter your product review:</label><br>
+                <textarea id="productReview" name="productReview" rows="4" cols="50"></textarea><br>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+        
+       
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Contact information and form for inquiries.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Skin Health Awareness</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>document.getElementById('viewTipForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        fetch('/view_tip', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const healthTipsDiv = document.getElementById('healthTips');
+            healthTipsDiv.innerHTML = ''; // Clear previous content
+            
+            data.forEach(tip => {
+                const tipParagraph = document.createElement('p');
+                tipParagraph.textContent = tip.tip;
+                healthTipsDiv.appendChild(tipParagraph);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching health tips.');
+        });
+    });
+    </script> 
+    
+    <script>document.getElementById('productViewForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        fetch('/view_product_reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const productTipsDiv = document.getElementById('productTips');
+            productTipsDiv.innerHTML = ''; // Clear previous content
+            
+            data.forEach(review => {
+                const reviewParagraph = document.createElement('p');
+                reviewParagraph.textContent = `Product: ${review.name}, Review: ${review.review}`;
+                productTipsDiv.appendChild(reviewParagraph);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching product reviews.');
+        });
+    });
+    
+    </script> 
+    
+    <!-- JavaScript for handling form submission and displaying submitted tips -->
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Userpage</title>
+</head>
+<body>
+    
+    <h1 id="welcome-message">Welcome <%= username %>!</h1>
+
+    <!-- Div for displaying notifications -->
+    <div id="notificationContainer" style="border: 2px solid black; padding: 20px; font-style: italic;">
+    </div>
+    
+    <form id="notificationForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required><br><br>
+        
+        <label for="disease">Disease:</label>
+        <input type="text" id="disease" name="disease" required><br><br>
+        
+        
+        
+        <label for="doctorList">Select Doctor:</label>
+        <select id="doctorList" name="doctor" style="width:200px">
+           
+        </select><br><br>
+        
+        <button type="submit">Send </button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>  
+        const socket = io();
+        let doctors = [];
+
+        const username = '<%= username %>';
+        if (username) {
+            socket.emit('login', username);
+            fetchDoctors();
+        } else {
+            console.error('Username not provided');
+        }
+
+        function fetchDoctors() {
+            console.log("Fetching doctors...");
+            fetch('/users')
+            .then(response => response.json())
+            .then(data => {
+                
+                doctors = data.users;
+                updateDoctorList();
+            })
+            .catch(error => console.error('Error fetching doctors:', error));
+        }
+
+        function updateDoctorList() {
+            const doctorList = document.getElementById('doctorList');
+            doctorList.innerHTML = '';
+            doctors.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor;
+                option.textContent = doctor;
+                doctorList.appendChild(option);
+            });
+        }
+
+        function sendNotification() {
+    const form = document.getElementById('notificationForm');
+    const formData = new FormData(form);
+    const sender = formData.get('name');
+    const age = formData.get('age');
+    const disease = formData.get('disease');
+    const recipient = formData.get('doctor');
+    
+    socket.emit('notification', { sender, recipient, disease, age });
+}
+
+function displayNotification(sender, disease,age) {
+            const notificationContainer = document.getElementById('notificationContainer');
+            const notificationDiv = document.createElement('div');
+            notificationDiv.textContent = `${sender}: ${disease}:${age}`;
+            notificationContainer.appendChild(notificationDiv);
+        }
+
+        // Listen for incoming notifications from the server
+        socket.on('notification', (data) => {
+            // Display the notification
+            displayNotification(data.sender, data.disease,data.age);
+        });
+
+        // Prevent default form submission and send notification via socket
+        document.getElementById('notificationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendNotification();
+        });
+    </script>
+</body>
+</html>

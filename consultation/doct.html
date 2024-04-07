@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login or Signup</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+    }
+    .container {
+        max-width: 400px;
+        margin: 100px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+    .toggle-form {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+    .signup-form {
+        display: none; /* Initially hide the signup form */
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div id="login-form">
+        <h2>Login</h2>
+        <form action="/login2" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+        <p class="toggle-form">Don't have an account? <a href="#" onclick="toggleForms()">Signup</a></p>
+    </div>
+    <div id="signup-form" class="signup-form">
+        <h2>Signup</h2>
+        <form action="/signup2" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Signup">
+        </form>
+        <p class="toggle-form">Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
+    </div>
+</div>
+
+<script>
+    function toggleForms() {
+        var loginForm = document.getElementById('login-form');
+        var signupForm = document.getElementById('signup-form');
+
+        if (loginForm.style.display === 'block') {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        } else {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

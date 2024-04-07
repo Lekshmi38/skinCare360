@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmetic Analyser</title>
+  <style>
+    /* Style for extracted text */
+    body {
+   
+    margin: 0;
+    padding-left:20px;
+}
+    h1{
+      padding-top: 30px;
+      margin: 0;
+      background-color:#F2D7D5 ;
+      left: 0;
+    right: 0;
+    color:black;
+    box-shadow:#f09993 -2px 0px 5px 0px;
+   padding-left: 40%;
+   padding-bottom: 50px;
+    }
+    p{
+      
+      font-size: 16px;
+      margin-left: 20px;
+      line-height: 1cm;
+    }
+.extracted-text {
+  margin-top: 20px;
+}
+ul li {
+  text-decoration: none;
+}
+.extracted-text li {
+  margin-bottom: 20px;
+ 
+}
+
+.word {
+  font-weight: bold;
+  color: #333; /* Dark text color */
+}
+
+.description {
+  color: #666; /* Slightly darker text color */
+}
+
+.skin-type {
+  font-style: italic;
+  color: #999; /* Lighter text color */
+}
+
+    .progress-circle {
+      margin: 20px;
+      width: 120px;
+      height: 120px;
+      background-color: #ddd;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-circle::before {
+      content: attr(data-progress) '%'; /* Display progress percentage */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20px;
+      color: black; /* Text color */
+    }
+    .progress-circle::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 5px solid transparent; /* Border thickness */
+      border-radius: 50%;
+      clip-path: polygon(50% 0%, 50% 100%, 50% 100%, 50% 0%); /* Default clip-path */
+      transform-origin: top center;
+      transform: rotate(calc(var(--progress) * 3.6deg)); /* Progress rotation */
+      transition: transform 0.5s ease-in-out; /* Transition for smooth animation */
+    }
+    .progress-circle::after.fill {
+      border-color: var(--progress-color, #3cb371); /* Border color */
+    }
+  </style>
+</head>
+<body>
+  <h1>Cosmetic Analyser</h1>
+  <b><i><p>Discover the beauty within with our advanced Cosmetic Analyser. Unveil the secrets of skincare products tailored to your unique skin type and unveil your radiant beauty effortlessly.</p>
+</b></i>
+  <form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Upload Image</button>
+  </form>
+  <div>
+    <h2>Extracted Text with Benefits:</h2>
+    <ul>
+    
+      <% let oil = 0, dry = 0, normal = 0; %>
+      <% textWithBenefits.forEach(item => { %>
+        <li class="extracted-text">
+          Ingredient: <span class="word"><%= item.word %></span><br>
+          Description: <span class="description"><%= item.description %></span><br>
+          Skin Type: <span class="skin-type"><%= item.skin %></span>
+        </li>
+        <% if(item.skin === "oil") { oil++; } else if(item.skin === "dry") { dry++; } else { normal++; } %>
+      <% }); %>
+      <%
+        let majority = "";
+        let percentage = 0;
+        if (oil > dry && oil > normal) { majority = "oil"; percentage = (oil / (oil + dry + normal)) * 100; }
+        else if (dry > oil && dry > normal) { majority = "dry"; percentage = (dry / (oil + dry + normal)) * 100; }
+        else if (normal > oil && normal > dry) { majority = "normal"; percentage = (normal / (oil + dry + normal)) * 100; }
+        else { majority = "0"; }
+        
+        let progressColor = '';
+        switch (majority) {
+          case 'oil':
+            progressColor = '#ff6347'; // Red color for oil skin type
+            break;
+          case 'dry':
+            progressColor = '#4682b4'; // SteelBlue color for dry skin type
+            break;
+          case 'normal':
+            progressColor = '#32cd32'; // LimeGreen color for normal skin type
+            break;
+          default:
+            progressColor = '#3cb371'; // Default Green color
+        }
+      %>
+      <p>Majority skin type is <%= majority %>.</p>
+      <div class="progress-circle" data-progress="<%= percentage %>" style="--progress-color: <%= progressColor %>"></div>
+    </ul>
+    <h2>Chemicals Used</h2>
+<ul>
+  <% textWithChemicals.forEach(function(item) { %>
+    <li><%= item.name %></li>
+  <% }); %>
+</ul>
+   
+  </div>
+ 
+
+
+
+  
+  <script>
+  document.querySelectorAll('.progress-circle').forEach(circle => {
+    const progress = parseFloat(circle.getAttribute('data-progress'));
+    circle.style.setProperty('--progress', progress);
+  });
+</script>
+
+</body>
+</html>

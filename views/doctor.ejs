@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Userpage</title>
+</head>
+<body>
+    
+    <h1 id="welcome-message">Welcome  <%= username %>!
+    </h1>
+
+    <!-- Div for displaying notifications -->
+    <div id="notificationContainer" style="border: 2px solid black; padding: 20px; font-style: italic;">
+    
+    </div>
+    
+    
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script >  
+        const socket = io();
+        let recipients = [];
+        
+        console.log('Before prompt');
+        const username = '<%= username %>';
+        if (username) {
+           
+            socket.emit('loginn', username);
+         //   fetchRecipients();
+        } else {
+            // Handle case where username is not provided
+            console.error('Username not provided');
+        }  
+
+
+       
+        function fetchNotifications() {
+            fetch('/notification')
+            .then(response => response.json())
+            .then(data => {
+                // Display notifications
+                data.notifications.forEach(notification => {
+                    displayNotification(notification.sender, notification.disease,notification.age);
+                });
+            })
+            .catch(error => console.error('Error fetching notifications:', error));
+        }
+
+        // Function to send notification to the server
+       
+
+        // Function to display notification
+        function displayNotification(sender, disease,age) {
+            const notificationContainer = document.getElementById('notificationContainer');
+            const notificationDiv = document.createElement('div');
+            notificationDiv.textContent = `${sender}: ${disease}:${age}`;
+            notificationContainer.appendChild(notificationDiv);
+        }
+
+        // Listen for incoming notifications from the server
+        socket.on('notification', (data) => {
+            // Display the notification
+            displayNotification(data.sender, data.disease,data.age);
+        });
+    </script>
+</body>
+</html>

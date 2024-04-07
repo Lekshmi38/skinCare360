@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient or Doctor</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+    }
+    .container {
+        max-width: 600px;
+        margin: 100px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h1 {
+        color: #333;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    .patient-button {
+        background-color: #28a745;
+    }
+    .doctor-button {
+        background-color: #17a2b8;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Are You a Patient or Doctor?</h1>
+    <form action="/patient" method="GET" enctype="multipart/form-data">
+       
+        <button type="submit">Im patient</button>
+      </form>
+    <br>
+    <form action="/doct" method="GET" enctype="multipart/form-data">
+       
+        <button type="submit" class="doctor-button">I'm Doctor</button>
+      </form>
+
+   
+</div>
+
+</body>
+</html>
